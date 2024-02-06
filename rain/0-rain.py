@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-
 """
     Calculate the amount of rainwater retained between walls.
 
@@ -9,33 +8,30 @@
     it rains.
 """
 
+
 def rain(walls):
-    if not walls or len(walls) <= 2:
+    if not walls:
         return 0
 
     n = len(walls)
     left_max = [0] * n
+    # Initialize an array to store the maximum height to the left
     right_max = [0] * n
+    # Initialize an array to store the maximum height to the right
 
+    # Calculate the maximum height to the left of each position
     left_max[0] = walls[0]
     for i in range(1, n):
         left_max[i] = max(left_max[i - 1], walls[i])
 
+    # Calculate the maximum height to the right of each position
     right_max[n - 1] = walls[n - 1]
     for i in range(n - 2, -1, -1):
         right_max[i] = max(right_max[i + 1], walls[i])
 
-    total_water = 0
-    for i in range(1, n - 1):
-        water_at_position = min(left_max[i], right_max[i]) - walls[i]
-        total_water += max(0, water_at_position)
+    # Calculate the amount of water retained at each position
+    water_retained = 0
+    for i in range(n):
+        water_retained += max(0, min(left_max[i], right_max[i]) - walls[i])
 
-    return total_water
-
-# Test cases
-walls1 = [0, 1, 0, 2, 0, 3, 0, 4]
-walls2 = [2, 0, 0, 4, 0, 0, 1, 0]
-
-print(rain(walls1))  # Output: 6
-print(rain(walls2))  # Output: 6
-
+    return water_retained
